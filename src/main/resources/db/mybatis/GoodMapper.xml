@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.goodsmanage.mapper.GoodMapper">
+    <resultMap id="BaseResultMap" type="com.example.goodsmanage.domain.Good">
+        <id column="GOOD_ID" jdbcType="BIGINT" property="goodId"/>
+        <result column="GOOD_NAME" jdbcType="VARCHAR" property="goodName"/>
+        <result column="CATEGORY_ID" jdbcType="BIGINT" property="categoryId"/>
+        <result column="STORAGE_DATE" jdbcType="TIMESTAMP" property="storageDate"/>
+        <result column="UNIT" javaType="string" property="unit"/>
+        <result column="INVENTORY" javaType="long" property="inventory"/>
+        <result column="NOTE" javaType="string" property="note"/>
+
+        <association property="category" javaType="com.example.goodsmanage.domain.Category">
+            <id column="CATEGORY_ID" jdbcType="BIGINT" property="categoryId"/>
+            <result column="CATEGORY_NAME" jdbcType="VARCHAR" property="categoryName"/>
+        </association>
+    </resultMap>
+    <insert id="insert" parameterType="com.example.goodsmanage.domain.Good">
+        INSERT INTO GOOD (GOOD_NAME, CATEGORY_ID, STORAGE_DATE, UNIT, INVENTORY, NOTE)
+        VALUES (#{goodName}, #{categoryId}, #{storageDate}, #{unit}, #{inventory}, #{note})
+    </insert>
+    <update id="updateById">
+        update GOOD
+        <set>
+            <if test="goodName != null">
+                GOOD_NAME = #{goodName},
+            </if>
+            <if test="categoryId != null">
+                CATEGORY_ID = #{categoryId},
+            </if>
+            <if test="storageDate != null">
+                STORAGE_DATE = #{storageDate},
+            </if>
+            <if test="unit != null">
+                UNIT = #{unit},
+            </if>
+            <if test="inventory != null">
+                INVENTORY = #{inventory},
+            </if>
+            <if test="note != null">
+                NOTE = #{note},
+            </if>
+        </set>
+        where GOOD_ID = #{goodId}
+    </update>
+    <delete id="removeById">
+        delete from GOOD where GOOD_ID = #{goodId}
+    </delete>
+
+    <select id="getExistGood" resultMap="BaseResultMap">
+        select *
+        from GOOD
+                 left join CATEGORY ON GOOD.CATEGORY_ID = CATEGORY.CATEGORY_ID
+        WHERE GOOD.INVENTORY > 0;
+    </select>
+    <select id="selectById" resultMap="BaseResultMap">
+        select *
+        from GOOD
+                 left join CATEGORY ON GOOD.CATEGORY_ID = CATEGORY.CATEGORY_ID
+        WHERE GOOD.GOOD_ID = #{goodId};
+    </select>
+    <select id="selectByGoodName" resultMap="BaseResultMap">
+        select *
+        from GOOD
+                 left join CATEGORY ON GOOD.CATEGORY_ID = CATEGORY.CATEGORY_ID
+        WHERE GOOD.GOOD_NAME = #{goodName};
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select *
+        from GOOD
+                 left join CATEGORY ON GOOD.CATEGORY_ID = CATEGORY.CATEGORY_ID
+    </select>
+</mapper>

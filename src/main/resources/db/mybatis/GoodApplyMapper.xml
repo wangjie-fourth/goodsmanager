@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.goodsmanage.mapper.GoodApplyMapper">
+    <resultMap id="BaseResultMap" type="com.example.goodsmanage.domain.GoodApply">
+        <id column="GOOD_APPLY_ID" jdbcType="BIGINT" property="goodApplyId"/>
+        <result column="GOOD_ID" jdbcType="BIGINT" property="goodId"/>
+        <result column="APPLY_USER" jdbcType="VARCHAR" property="applyUser"/>
+        <result column="APPLY_DATE" javaType="date" property="applyDate"/>
+        <result column="APPLY_NUMBER" javaType="Integer" property="applyNumber"/>
+        <result column="APPLY_EXPLAIN" javaType="string" property="applyExplain"/>
+
+        <association property="good" javaType="com.example.goodsmanage.domain.Good" autoMapping="true">
+        </association>
+    </resultMap>
+    <insert id="add">
+        INSERT INTO GOOD_APPLY(GOOD_ID, APPLY_USER, APPLY_DATE, APPLY_NUMBER, APPLY_EXPLAIN)
+        values (#{goodId}, #{applyUser}, #{applyDate}, #{applyNumber}, #{applyExplain})
+    </insert>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select *
+        from GOOD_APPLY
+                 left join GOOD ON GOOD.GOOD_ID = GOOD_APPLY.GOOD_ID;
+    </select>
+</mapper>

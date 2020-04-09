@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>物品申领</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <script src="/asset/boot.js" type="text/javascript"></script>
+    <script src="/asset/miniui/miniui.js" type="text/javascript"></script>
+    <style type="text/css">
+
+
+    </style>
+</head>
+<body>
+<form id="form1" method="post">
+    <table border="0" cellpadding="1" cellspacing="2">
+        <tr>
+            <td style="width:100px;">物品名称：</td>
+            <td style="width:100px">
+                <input name="goodId" class="mini-combobox" url="/good/exist" required="true"/>
+            </td>
+        </tr>
+        <tr>
+            <td>领用人员：</td>
+            <td>
+                <input name="applyUser" class="mini-textbox" required="true"/>
+            </td>
+        </tr>
+        <tr>
+            <td>领用日期：</td>
+            <td>
+                <input id="storageDate" name="applyDate" class="mini-datepicker" required="true" format="yyyy-MM-dd HH:mm:ss"/>
+            </td>
+        </tr>
+        <tr>
+            <td>领用数量：</td>
+            <td>
+                <input name="applyNumber" class="mini-textbox" required="true"/>
+            </td>
+        </tr>
+        <tr>
+            <td>物品备注：</td>
+            <td colspan="3">
+                <input name="applyExplain" class="mini-textarea" style="width:100%;height:60px;" required="true"/>
+            </td>
+        </tr>
+        <tr>
+            <td><a class="mini-button" onclick="addGood()" style="width: 60px; margin-right: 20px;">保存</a></td>
+        </tr>
+    </table>
+</form>
+
+
+<script type="text/javascript">
+    mini.parse();
+
+    mini.get("storageDate").setValue(new Date());
+
+    function addGood() {
+        //获取表单对象
+        const form = new mini.Form("form1");
+        //验证
+        form.validate();
+        if (!form.isValid()) {
+            mini.alert("不可以有空项哦！");
+            return;
+        } else if (!(/(^[1-9]\d*$)/.test(form.getData().applyNumber))) {
+            mini.alert("库存只能为正整数哦！");
+            return;
+        }
+        // 保存新的商品
+        const good = form.getData();
+        $.ajax({
+            url: "/apply/add",
+            type: "post",
+            contentType: 'application/json',
+            data: JSON.stringify(good),
+            success: function (text) {
+                mini.alert("添加成功");
+            },
+            error: function (jqXHR) {
+                alert(jqXHR.responseText);
+            }
+        });
+    }
+
+</script>
+
+<div class="description">
+</div>
+</body>
+
+</html>

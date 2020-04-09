@@ -1,0 +1,8 @@
+create table CATEGORY
+(
+    CATEGORY_ID   bigint primary key auto_increment comment '主键id',
+    CATEGORY_NAME varchar(100) comment '类别名称'
+) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8 comment '商品类别信息表';
+INSERT INTO CATEGORY(CATEGORY_ID,CATEGORY_NAME) VALUES (1,'电脑');
+INSERT INTO CATEGORY(CATEGORY_ID,CATEGORY_NAME) VALUES (2,'办公用品');
+INSERT INTO CATEGORY(CATEGORY_ID,CATEGORY_NAME) VALUES (3,'配件');
